@@ -70,7 +70,7 @@ public abstract class DAO {
     protected final boolean createTable() {
         try {
             PreparedStatement stmt;
-            // Table client:
+            // Tabela cliente:
             stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS cliente( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
                     + "nome VARCHAR, \n"
@@ -79,30 +79,30 @@ public abstract class DAO {
                     + "email VARCHAR, \n"
                     + "telefone VARCHAR); \n");
             executeUpdate(stmt);
-            // Table animal:
+            // Tabela animal:
             stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS animal( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
                     + "nome VARCHAR, \n"
                     + "idade INTEGER, \n"
-                    + "sexo VARCHAR, \n"
+                    + "sexo INTEGER, \n"
                     + "id_especie INTEGER, \n"
                     + "id_cliente INTEGER); \n");
             executeUpdate(stmt);
-            // Table species:
+            // Tabela especie:
             stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS especie( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
                     + "nome VARCHAR); \n");
             executeUpdate(stmt);
-            // Table vet:
-            stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS veterinario( \n"
+            // Tabela veterinario:
+            stmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS veterinario( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
                     + "nome VARCHAR, \n"
                     + "endereco VARCHAR, \n"
-                    + "cep INTEGER); \n"
-                    + "telefone VARCHAR); \n"
-                    + "email VARCHAR); \n");
+                    + "cep INTEGER, \n" 
+                    + "telefone VARCHAR, \n"
+                    + "email VARCHAR); \n"); 
             executeUpdate(stmt);        
-            // Table appointment:
+            // Tabela consulta:
             stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS consulta( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
                     + "data DATE, \n"
@@ -113,10 +113,10 @@ public abstract class DAO {
                     + "id_tratamento INTEGER, \n"
                     + "terminado INTEGER); \n");
             executeUpdate(stmt);            
-             // Table exam:
+             // Tabela exame:
             stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS exame( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
-                    + "nome VARCHAR, \n"
+                    + "descricao VARCHAR, \n"
                     + "id_consulta INTEGER); \n");
             executeUpdate(stmt);      
             return true;

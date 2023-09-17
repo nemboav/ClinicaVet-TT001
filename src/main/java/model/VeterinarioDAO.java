@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class VeterinarioDAO extends DAO {
-    private static ClienteDAO instance;
+    private static VeterinarioDAO instance;
 
     private VeterinarioDAO() {
         getConnection();
@@ -18,83 +18,82 @@ public class VeterinarioDAO extends DAO {
 
     // Singleton
     public static VeterinarioDAO getInstance() {
-        return (instance==null?(instance = new VeterinarioDAO()):instance);
+        return (instance == null ? (instance = new VeterinarioDAO()) : instance);
     }
 
-// CRUD
+    // CRUD
     public Veterinario create(String nome, String endereco, long cep, String telefone, String email) {
         try {
             PreparedStatement stmt;
-            stmt = DAO.getConnection().prepareStatement("INSERT INTO cliente (nome, endereco, cep, email, telefone) VALUES (?,?,?,?,?)");
+            stmt = DAO.getConnection().prepareStatement("INSERT INTO veterinario (nome, endereco, cep, telefone, email) VALUES (?, ?, ?, ?, ?)");
             stmt.setString(1, nome);
             stmt.setString(2, endereco);
             stmt.setLong(3, cep);
-            stmt.setString(5, telefone);
-            stmt.setString(4, email);
+            stmt.setString(4, telefone);
+            stmt.setString(5, email);
             executeUpdate(stmt);
         } catch (SQLException ex) {
-            Logger.getLogger(VeterinarioDAO.class.getNome()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VeterinarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return this.retrieveById(lastId("cliente","id"));
+        return this.retrieveById(lastId("veterinario", "id"));
     }
 
-
-    private Cliente buildObject(ResultSet rs) {
-        Cliente cliente = null;
+    private Veterinario buildObject(ResultSet rs) {
+        Veterinario veterinario = null;
         try {
-            cliente = new Cliente(rs.getInt("id"), rs.getString("nome"), rs.getString("endereco"), rs.getString("cep"), rs.getString("email"), rs.getString("telefone"));
+            veterinario = new Veterinario(rs.getInt("id"), rs.getString("nome"), rs.getString("endereco"), rs.getLong("cep"), rs.getString("telefone"), rs.getString("email"));
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
         }
-        return cliente;
+        return veterinario;
     }
 
     // Generic Retriever
-    public List retrieve(String query) {
-        List<Cliente> clientes = new ArrayList();
+    public List<Veterinario> retrieve(String query) {
+        List<Veterinario> veterinarios = new ArrayList<>();
         ResultSet rs = getResultSet(query);
         try {
             while (rs.next()) {
-                clientes.add(buildObject(rs));
+                veterinarios.add(buildObject(rs));
             }
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
         }
-        return clientes;
+        return veterinarios;
     }
 
     // RetrieveAll
-    public List retrieveAll() {
-        return this.retrieve("SELECT * FROM cliente");
+    public List<Veterinario> retrieveAll() {
+        return this.retrieve("SELECT * FROM veterinario");
     }
 
     // RetrieveLast
-    public List retrieveLast(){
-        return this.retrieve("SELECT * FROM veterinario WHERE nome = " + lastId("cliente","id"));
+    public List<Veterinario> retrieveLast() {
+        return this.retrieve("SELECT * FROM veterinario WHERE id = " + lastId("veterinario", "id"));
     }
 
     // RetrieveById
     public Veterinario retrieveById(int id) {
-        List<Veterinario> veterinarios = this.retrieve("SELECT * FROM veterinarios WHERE nome = " + nome);
-        return (veterinarios.isEmpty()?null:veterinarios.get(0));
+        List<Veterinario> veterinarios = this.retrieve("SELECT * FROM veterinario WHERE id = " + id);
+        return (veterinarios.isEmpty() ? null : veterinarios.get(0));
     }
 
     // RetrieveBySimilarName
-    public List retrieveBySimilarName(String nome) {
-        return this.retrieve("SELECT * FROM cliente WHERE nome LIKE '%" + nome + "%'");
+    public List<Veterinario> retrieveBySimilarName(String nome) {
+        return this.retrieve("SELECT * FROM veterinario WHERE nome LIKE '%" + nome + "%'");
     }
 
-    // Updade
+    // Update
     public void update(Veterinario veterinario) {
         try {
             PreparedStatement stmt;
-            stmt = DAO.getConnection().prepareStatement("UPDATE cliente SET nome=?, endereco=?, cep=?, email=?, telefone=? WHERE id=?");
-            stmt.setString(1, cliente.getNome());
-            stmt.setString(2, cliente.getEndereco());
-            stmt.setString(3, cliente.getCep());
-            stmt.setString(4, cliente.getEmail());
-            stmt.setString(5, cliente.getTelefone());
-            stmt.setInt(6, cliente.getId());
+            stmt = DAO.getConnection().prepareStatement("UPDATE veterinario SET nome=?, endereco=?, cep=?, telefone=?, email=? WHERE id=?");
+            stmt.setString(1, veterinario.getNome());
+            stmt.setString(2, veterinario.getEndereco());
+            stmt.setLong(3, veterinario.getCep());
+            stmt.setString(4, veterinario.getTelefone());
+            stmt.setString(5, veterinario.getEmail());
+            stmt.setInt(6, veterinario.getId());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
@@ -102,15 +101,14 @@ public class VeterinarioDAO extends DAO {
     }
 
     // Delete
-    public void delete(Cliente cliente) {
+    public void delete(Veterinario veterinario) {
         PreparedStatement stmt;
         try {
-            stmt = DAO.getConnection().prepareStatement("DELETE FROM cliente WHERE id = ?");
-            stmt.setInt(1, cliente.getId());
+            stmt = DAO.getConnection().prepareStatement("DELETE FROM veterinario WHERE id = ?");
+            stmt.setInt(1, veterinario.getId());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
         }
     }
-    
 }

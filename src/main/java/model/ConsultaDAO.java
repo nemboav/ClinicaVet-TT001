@@ -3,6 +3,9 @@ package model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date; // Importe java.sql.Date
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,31 +21,43 @@ public class ConsultaDAO extends DAO {
 
     // Singleton
     public static ConsultaDAO getInstance() {
-        return (instance==null?(instance = new ConsultaDAO()):instance);
+        return (instance == null ? (instance = new ConsultaDAO()) : instance);
     }
 
-// CRUD
-    public Consulta create(String nome, String end, String cep, String email, String telefone) {
+    // CRUD
+    public Consulta create(Date data, String horario, String comentario, int idAnimal, int idVeterinario, int idTratamento, int terminado) {
         try {
             PreparedStatement stmt;
-            stmt = DAO.getConnection().prepareStatement("INSERT INTO cliente (nome, endereco, cep, email, telefone) VALUES (?,?,?,?,?)");
-            stmt.setString(1, nome);
-            stmt.setString(2, end);
-            stmt.setString(3, cep);
-            stmt.setString(4, email);
-            stmt.setString(5, telefone);
+            stmt = getConnection().prepareStatement("INSERT INTO consulta (data, horario, comentario, id_animal, id_vet, id_tratamento, terminado) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            stmt.setDate(1, data);
+            stmt.setString(2, horario);
+            stmt.setString(3, comentario);
+            stmt.setInt(4, idAnimal);
+            stmt.setInt(5, idVeterinario);
+            stmt.setInt(6, idTratamento);
+            stmt.setInt(7, terminado);
             executeUpdate(stmt);
         } catch (SQLException ex) {
             Logger.getLogger(ConsultaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return this.retrieveById(lastId("consulta","id"));
+        return this.retrieveById(lastId("consulta", "id"));
     }
 
-
     private Consulta buildObject(ResultSet rs) {
-        Consulta cliente = null;
+        Consulta consulta = null;
         try {
-            consulta = new Consulta(rs.getInt("id"), rs.getString("nome"), rs.getString("endereco"), rs.getString("cep"), rs.getString("email"), rs.getString("telefone"));
+            Date data = rs.getDate("data"); // Utilize o getDate para obter uma data
+
+            consulta = new Consulta(
+                rs.getInt("id"),
+                data,
+                rs.getString("horario"),
+                rs.getString("comentario"),
+                rs.getInt("id_animal"),
+                rs.getInt("id_vet"),
+                rs.getInt("id_tratamento"),
+                rs.getInt("terminado")
+            );
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
         }
@@ -50,8 +65,8 @@ public class ConsultaDAO extends DAO {
     }
 
     // Generic Retriever
-    public List retrieve(String query) {
-        List<Consulta> consultas = new ArrayList();
+    public List<Consulta> retrieve(String query) {
+        List<Consulta> consultas = new ArrayList<>();
         ResultSet rs = getResultSet(query);
         try {
             while (rs.next()) {
@@ -64,37 +79,39 @@ public class ConsultaDAO extends DAO {
     }
 
     // RetrieveAll
-    public List retrieveAll() {
+    public List<Consulta> retrieveAll() {
         return this.retrieve("SELECT * FROM consulta");
     }
 
     // RetrieveLast
-    public List retrieveLast(){
-        return this.retrieve("SELECT * FROM consulta WHERE id = " + lastId("cliente","id"));
+    public List<Consulta> retrieveLast() {
+        return this.retrieve("SELECT * FROM consulta WHERE id = " + lastId("consulta", "id"));
     }
 
     // RetrieveById
     public Consulta retrieveById(int id) {
-        List<Consulta> consultas = this.retrieve("SELECT * FROM cliente WHERE id = " + id);
-        return (consultas.isEmpty()?null:consultas.get(0));
+        List<Consulta> consultas = this.retrieve("SELECT * FROM consulta WHERE id = " + id);
+        return (consultas.isEmpty() ? null : consultas.get(0));
     }
 
     // RetrieveBySimilarName
-    public List retrieveBySimilarName(String nome) {
+    public List<Consulta> retrieveBySimilarName(String nome) {
         return this.retrieve("SELECT * FROM consulta WHERE nome LIKE '%" + nome + "%'");
     }
 
-    // Updade
+    // Update
     public void update(Consulta consulta) {
         try {
             PreparedStatement stmt;
-            stmt = DAO.getConnection().prepareStatement("UPDATE consulta SET nome=?, endereco=?, cep=?, email=?, telefone=? WHERE id=?");
-            stmt.setString(1, cliente.getNome());
-            stmt.setString(2, cliente.getEndereco());
-            stmt.setString(3, cliente.getCep());
-            stmt.setString(4, cliente.getEmail());
-            stmt.setString(5, cliente.getTelefone());
-            stmt.setInt(6, cliente.getId());
+            stmt = getConnection().prepareStatement("UPDATE consulta SET data=?, horario=?, comentario=?, id_animal=?, id_vet=?, id_tratamento=?, terminado=? WHERE id=?");
+            stmt.setString(1, consulta.getData().toString());
+            stmt.setString(2, consulta.getHorario());
+            stmt.setString(3, consulta.getComentario());
+            stmt.setInt(4, consulta.getIdAnimal());
+            stmt.setInt(5, consulta.getIdVeterinario());
+            stmt.setInt(6, consulta.getIdTratamento());
+            stmt.setInt(7, consulta.getTerminado());
+            stmt.setInt(8, consulta.getId());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
@@ -105,7 +122,7 @@ public class ConsultaDAO extends DAO {
     public void delete(Consulta consulta) {
         PreparedStatement stmt;
         try {
-            stmt = DAO.getConnection().prepareStatement("DELETE FROM consulta WHERE id = ?");
+            stmt = getConnection().prepareStatement("DELETE FROM consulta WHERE id = ?");
             stmt.setInt(1, consulta.getId());
             executeUpdate(stmt);
         } catch (SQLException e) {
