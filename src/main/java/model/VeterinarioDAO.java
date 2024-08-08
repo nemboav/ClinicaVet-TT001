@@ -22,15 +22,13 @@ public class VeterinarioDAO extends DAO {
     }
 
     // CRUD
-    public Veterinario create(String nome, String endereco, long cep, String telefone, String email) {
+    public Veterinario create(String nome, String email, String telefone) {
         try {
             PreparedStatement stmt;
-            stmt = DAO.getConnection().prepareStatement("INSERT INTO veterinario (nome, endereco, cep, telefone, email) VALUES (?, ?, ?, ?, ?)");
+            stmt = DAO.getConnection().prepareStatement("INSERT INTO veterinario (nome, email, telefone) VALUES (?, ?, ?)");
             stmt.setString(1, nome);
-            stmt.setString(2, endereco);
-            stmt.setLong(3, cep);
-            stmt.setString(4, telefone);
-            stmt.setString(5, email);
+            stmt.setString(2, email);
+            stmt.setString(3, telefone);
             executeUpdate(stmt);
         } catch (SQLException ex) {
             Logger.getLogger(VeterinarioDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -41,7 +39,7 @@ public class VeterinarioDAO extends DAO {
     private Veterinario buildObject(ResultSet rs) {
         Veterinario veterinario = null;
         try {
-            veterinario = new Veterinario(rs.getInt("id"), rs.getString("nome"), rs.getString("endereco"), rs.getLong("cep"), rs.getString("telefone"), rs.getString("email"));
+            veterinario = new Veterinario(rs.getInt("id"), rs.getString("nome"), rs.getString("telefone"), rs.getString("email"));
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
         }
@@ -87,13 +85,11 @@ public class VeterinarioDAO extends DAO {
     public void update(Veterinario veterinario) {
         try {
             PreparedStatement stmt;
-            stmt = DAO.getConnection().prepareStatement("UPDATE veterinario SET nome=?, endereco=?, cep=?, telefone=?, email=? WHERE id=?");
+            stmt = DAO.getConnection().prepareStatement("UPDATE veterinario SET nome=?, email=? , telefone=?  WHERE id=?");
             stmt.setString(1, veterinario.getNome());
-            stmt.setString(2, veterinario.getEndereco());
-            stmt.setLong(3, veterinario.getCep());
-            stmt.setString(4, veterinario.getTelefone());
-            stmt.setString(5, veterinario.getEmail());
-            stmt.setInt(6, veterinario.getId());
+            stmt.setString(2, veterinario.getEmail());
+            stmt.setString(3, veterinario.getTelefone());
+            stmt.setInt(4, veterinario.getId());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());

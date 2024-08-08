@@ -1,20 +1,20 @@
 package model;
 
 public class Especie {
-    private int id;
+    private int idEspecie;
     private String nome;
 
     public Especie(int id, String nome) {
-        this.id = id;
+        this.idEspecie = id;
         this.nome = nome;
     }
 
-    public int getId() {
-        return id;
+    public int getIdEspecie() {
+        return idEspecie;
     }
     
-     public void setId(int id) {
-        this.id = id;
+     public void setIdEspecie(int id) {
+        this.idEspecie = id;
     }
 
     public String getNome() {
@@ -27,7 +27,7 @@ public class Especie {
 
     @Override
     public String toString() {
-        return "Especie{" + "id=" + id + ", nome=" + nome + '}';
+        return "Especie{" + "idEspecie=" + idEspecie + ", nome=" + nome + '}';
     }
 
 }

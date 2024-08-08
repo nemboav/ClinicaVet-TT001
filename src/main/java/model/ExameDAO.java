@@ -22,25 +22,24 @@ public class ExameDAO extends DAO {
     }
 
 // CRUD
-    public Exame create(int id, String descricao, int idConsulta) {
+    public Exame create(String descricao, int idConsulta) {
         try {
             PreparedStatement stmt;
-            stmt = getConnection().prepareStatement("INSERT INTO exame (id, descricao, id_consulta) VALUES (?,?,?)");
-            stmt.setInt(1, id);
-            stmt.setString(2, descricao);
-            stmt.setInt(3, idConsulta);
+            stmt = getConnection().prepareStatement("INSERT INTO exame (descricao, id_consulta) VALUES (?,?)");
+            stmt.setString(1, descricao);
+            stmt.setInt(2, idConsulta);
             executeUpdate(stmt);
         } catch (SQLException ex) {
             Logger.getLogger(ExameDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return this.retrieveById(lastId("exame", "id"));
+        return this.retrieveByExameId(lastId("exame", "id"));
     }
 
 
     private Exame buildObject(ResultSet rs) {
         Exame exame = null;
         try {
-            exame = new Exame(rs.getInt("id"), rs.getString("descricao"), rs.getInt("idConsulta"));
+            exame = new Exame(rs.getInt("id"), rs.getString("descricao"), rs.getInt("id_consulta"));
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
         }
@@ -72,7 +71,7 @@ public class ExameDAO extends DAO {
     }
 
     // RetrieveById
-    public Exame retrieveById(int id) {
+    public Exame retrieveByExameId(int id) {
         List<Exame> exames = this.retrieve("SELECT * FROM exame WHERE id = " + id);
         return (exames.isEmpty() ? null : exames.get(0));
     }
@@ -89,7 +88,7 @@ public class ExameDAO extends DAO {
             stmt = getConnection().prepareStatement("UPDATE exame SET descricao=?, id_consulta=? WHERE id=?");
             stmt.setString(1, exame.getDescricao());
             stmt.setInt(2, exame.getIdConsulta());
-            stmt.setInt(3, exame.getId());
+            stmt.setInt(3, exame.getIdExame());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
@@ -101,7 +100,7 @@ public class ExameDAO extends DAO {
         PreparedStatement stmt;
         try {
             stmt = getConnection().prepareStatement("DELETE FROM exame WHERE id = ?");
-            stmt.setInt(1, exame.getId());
+            stmt.setInt(1, exame.getIdExame());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());

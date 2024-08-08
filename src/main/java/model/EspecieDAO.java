@@ -70,10 +70,15 @@ public class EspecieDAO extends DAO {
     }
 
     // RetrieveById
-    public Especie retrieveById(int id) {
-        List<Especie> especies = this.retrieve("SELECT * FROM especie WHERE id = " + id);
+    public Especie retrieveById(int idEspecie) {
+        List<Especie> especies = this.retrieve("SELECT * FROM especie WHERE id = " + idEspecie);
         return (especies.isEmpty() ? null : especies.get(0));
     }   
+    
+    public Especie retrieveByName(String nome) {
+        List<Especie> especie = this.retrieve("SELECT * FROM especie WHERE nome LIKE '" + nome + "%'");
+        return (especie.isEmpty() ? null : especie.get(0));
+    }
 
     // RetrieveBySimilarName
     public List<Especie> retrieveBySimilarName(String nome) {
@@ -86,7 +91,7 @@ public class EspecieDAO extends DAO {
             PreparedStatement stmt;
             stmt = getConnection().prepareStatement("UPDATE especie SET nome=? WHERE id=?");
             stmt.setString(1, especie.getNome());
-            stmt.setInt(2, especie.getId());
+            stmt.setInt(2, especie.getIdEspecie());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());
@@ -97,8 +102,8 @@ public class EspecieDAO extends DAO {
     public void delete(Especie especie) {
         PreparedStatement stmt;
         try {
-            stmt = getConnection().prepareStatement("DELETE FROM especie WHERE id = ?");
-            stmt.setInt(1, especie.getId());
+            stmt = getConnection().prepareStatement("DELETE FROM especie WHERE id=?");
+            stmt.setInt(1, especie.getIdEspecie());
             executeUpdate(stmt);
         } catch (SQLException e) {
             System.err.println("Exception: " + e.getMessage());

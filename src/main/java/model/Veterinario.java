@@ -3,16 +3,13 @@ package model;
 public class Veterinario {
     private int id;
     private String nome;
-    private String endereco;
-    private long cep;
-    private String telefone;
     private String email;
+    private String telefone;
+   
 
-    public Veterinario(int id, String nome, String endereco, long cep, String telefone, String email) {
+    public Veterinario(int id, String nome, String telefone, String email) {
         this.id = id;
         this.nome = nome;
-        this.endereco = endereco;
-        this.cep = cep;
         this.telefone = telefone;
         this.email = email;
     }
@@ -31,23 +28,7 @@ public class Veterinario {
     
      public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-    
-     public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public long getCep() {
-        return cep;
-    }
-    
-      public void setCep(long cep) {
-        this.cep = cep;
-    }
+     }
 
     public String getTelefone() {
         return telefone;
@@ -67,7 +48,8 @@ public class Veterinario {
 
     @Override
     public String toString() {
-        return "Veterinario{" + "id=" + id + ", nome=" + nome + ", endereco=" + endereco + ", cep=" + cep + ", telefone=" + telefone + ", email=" + email + '}';
+        return "Veterinario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", telefone=" + telefone + '}';
     }
+      
 
 }

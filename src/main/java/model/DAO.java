@@ -83,8 +83,8 @@ public abstract class DAO {
             stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS animal( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
                     + "nome VARCHAR, \n"
-                    + "idade INTEGER, \n"
-                    + "sexo INTEGER, \n"
+                    + "idade VARCHAR, \n"
+                    + "sexo VARCHAR, \n"
                     + "id_especie INTEGER, \n"
                     + "id_cliente INTEGER); \n");
             executeUpdate(stmt);
@@ -97,11 +97,18 @@ public abstract class DAO {
             stmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS veterinario( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
                     + "nome VARCHAR, \n"
-                    + "endereco VARCHAR, \n"
-                    + "cep INTEGER, \n" 
                     + "telefone VARCHAR, \n"
                     + "email VARCHAR); \n"); 
-            executeUpdate(stmt);        
+            executeUpdate(stmt);
+            //Tabela tratamento:
+            stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS tratamento( \n"
+                    + "id INTEGER PRIMARY KEY  AUTO_INCREMENT, \n"
+                    + "id_animal INTEGER, \n"
+                    + "nome VARCHAR, \n"
+                    + "dataInicial VARCHAR, \n"
+                    + "dataFinal VARCHAR, \n"
+                    + "terminado INTEGER); \n");
+            executeUpdate(stmt);
             // Tabela consulta:
             stmt = DAO.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS consulta( \n"
                     + "id INTEGER PRIMARY KEY AUTO_INCREMENT, \n"
@@ -109,7 +116,7 @@ public abstract class DAO {
                     + "horario VARCHAR, \n"
                     + "comentario VARCHAR, \n"
                     + "id_animal INTEGER, \n"
-                    + "id_vet INTEGER, \n"
+                    + "id_veterinario INTEGER, \n"
                     + "id_tratamento INTEGER, \n"
                     + "terminado INTEGER); \n");
             executeUpdate(stmt);            

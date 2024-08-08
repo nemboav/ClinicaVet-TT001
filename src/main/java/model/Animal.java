@@ -3,25 +3,27 @@ package model;
 public class Animal {
     private int id;
     private String nome;
-    private int idade;
-    private int sexo;
+    private String idade;
+    private String sexo;
     private int idEspecie;
     private int idCliente;
+    private String especie;
 
-    public Animal(int id, String nome, int idade, int sexo, int idEspecie, int idCliente) {
+    public Animal(int id, String nome, String idade, String sexo, int idEspecie, int idCliente, String especie) {
         this.id = id;
         this.nome = nome;
         this.idade = idade;
         this.sexo = sexo;
         this.idEspecie = idEspecie;
         this.idCliente = idCliente;
+        this.especie = especie;
     }
 
     public int getId() {
         return id;
     }
     
-     public void setId(int id) {
+     public void setIdAnimal(int id) {
         this.id = id;
     }
 
@@ -33,19 +35,19 @@ public class Animal {
         this.nome = nome;
     }
 
-    public int getIdade() {
+    public String getIdade() {
         return idade;
     }
     
-     public void setIdade(int idade) {
+     public void setIdade(String idade) {
         this.idade = idade;
     }
 
-    public int getSexo() {
+    public String getSexo() {
         return sexo;
     }
     
-    public void setSexo(int sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 
@@ -53,7 +55,7 @@ public class Animal {
         return idEspecie;
     }
     
-      public void setIdEspecie(int idEspecie) {
+    public void setIdEspecie(int idEspecie) {
         this.idEspecie = idEspecie;
     }
 
@@ -61,13 +63,25 @@ public class Animal {
         return idCliente;
     }
 
-   public void setIdCliente(int idCliente) {
+    public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
+    }
+   
+    public String getEspecie() {
+       return especie;
+    }
+    
+    public void setEspecie(String especie) {
+       this.especie = especie;
     }
 
     @Override
     public String toString() {
-        return "Animal{" + "id=" + id + ", nome=" + nome + ", idade=" + idade + ", sexo=" + sexo + ", idEspecie=" + idEspecie + ", idCliente=" + idCliente + '}';
+        return "Animal{" + "id=" + id + ", nome=" + nome + ", idade=" 
+                + idade + ", sexo=" + sexo + ", idEspecie=" + idEspecie 
+                + ", idCliente=" + idCliente + ", especie=" + especie + '}';
     }
+
+   
 
 }

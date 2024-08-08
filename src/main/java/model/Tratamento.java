@@ -3,29 +3,79 @@ package model;
 import java.util.Date;
 
 public class Tratamento {
-    private Date dataInicial;
-    private Date dataFinal;
+    private int idTratamento;
+    private int idAnimal;
+    private String nome;
+    private String dataInicial;
+    private String dataFinal;
+    private boolean terminou;
 
-    public Tratamento(Date dataInicial, Date dataFinal) {
+    public Tratamento(int idTratamento, int idAnimal, String nome, String dataInicial, String dataFinal, boolean terminou) {
+        this.idTratamento = idTratamento;
+        this.idAnimal = idAnimal;
+        this.nome = nome;
         this.dataInicial = dataInicial;
         this.dataFinal = dataFinal;
+        this.terminou = terminou;
     }
 
-    public Date getDataInicial() {
+    public int getIdTratamento() {
+        return idTratamento;
+    }
+
+    public void setIdTratamento(int idTratamento) {
+        this.idTratamento = idTratamento;
+    }
+
+    public int getIdAnimal() {
+        return idAnimal;
+    }
+
+    public void setIdAnimal(int idAnimal) {
+        this.idAnimal = idAnimal;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDataInicial() {
         return dataInicial;
     }
-    
-     public void setDataInicial(Date dataInicial) {
+
+    public void setDataInicial(String dataInicial) {
         this.dataInicial = dataInicial;
     }
 
-
-    public Date getDataFinal() {
+    public String getDataFinal() {
         return dataFinal;
     }
-   
-    public void setDataFinal(Date dataFinal) {
+
+    public void setDataFinal(String dataFinal) {
         this.dataFinal = dataFinal;
     }
+
+    public boolean isTerminou() {
+        return terminou;
+    }
+
+    public void setTerminou(boolean terminou) {
+        this.terminou = terminou;
+    }
+
+    
+
+    @Override
+    public String toString() {
+        return "Tratamento{" + "idTratamento=" + idTratamento 
+                + ", idAnimal=" + idAnimal + ", nome=" + nome 
+                + ", dataInicial=" + dataInicial + ", dataFinal=" 
+                + dataFinal + ", terminou=" + terminou + '}';
+    }
+
     
 }

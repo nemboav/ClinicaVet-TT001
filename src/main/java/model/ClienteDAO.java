@@ -25,17 +25,17 @@ public class ClienteDAO extends DAO {
     public Cliente create(String nome, String end, String cep, String email, String telefone) {
         try {
             PreparedStatement stmt;
-            stmt = DAO.getConnection().prepareStatement("INSERT INTO cliente (nome, endereco, cep, email, telefone) VALUES (?,?,?,?,?)");
+            stmt = DAO.getConnection().prepareStatement("INSERT INTO cliente (nome, email, telefone, cep, endereco) VALUES (?,?,?,?,?)");
             stmt.setString(1, nome);
-            stmt.setString(2, end);
-            stmt.setString(3, cep);
-            stmt.setString(4, email);
-            stmt.setString(5, telefone);
+            stmt.setString(2, email);
+            stmt.setString(3, telefone);
+            stmt.setString(4, cep);
+            stmt.setString(5, end);
             executeUpdate(stmt);
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return this.retrieveById(lastId("cliente","id"));
+        return this.retrieveClienteById(lastId("cliente","id"));
     }
 
 
@@ -74,7 +74,7 @@ public class ClienteDAO extends DAO {
     }
 
     // RetrieveById
-    public Cliente retrieveById(int id) {
+    public Cliente retrieveClienteById(int id) {
         List<Cliente> clientes = this.retrieve("SELECT * FROM cliente WHERE id = " + id);
         return (clientes.isEmpty()?null:clientes.get(0));
     }
